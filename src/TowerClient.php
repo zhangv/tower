@@ -20,6 +20,8 @@ class TowerClient{
 	private $accessToken = null;
 	/** @var HttpClient Http客户端 */
 	private $httpClient = null;
+	/** @var TowerOAuth OAuth */
+	private $towerOAuth = null;
 
 	public function __construct($clientId, $clientSecret){
 		$this->clientId     = $clientId;
@@ -27,29 +29,35 @@ class TowerClient{
 		$this->httpClient = new HttpClient(5);
 	}
 
+	public function getTowerOAuth(){
+		if(!$this->towerOAuth){
+			$this->towerOAuth = new TowerOAuth($this->clientId,$this->clientSecret);
+		}
+		return $this->towerOAuth;
+	}
+
+	public function setHttpClient($httpClient){
+		$this->httpClient = $httpClient;
+	}
+
 	public function authorizeURI($redirectURI){
-		$oauth = new TowerOAuth($this->clientId,$this->clientSecret);
-		return $oauth->authorizeURI($redirectURI);
+		return $this->getTowerOAuth()->authorizeURI($redirectURI);
 	}
 
 	public function authorize($code,$redirectURI){
-		$oauth = new TowerOAuth($this->clientId,$this->clientSecret);
-		return $oauth->authorize($code,$redirectURI);
+		return $this->getTowerOAuth()->authorize($code,$redirectURI);
 	}
 
 	public function revoke($token){
-		$oauth = new TowerOAuth($this->clientId,$this->clientSecret);
-		return $oauth->revoke($token);
+		return $this->getTowerOAuth()->revoke($token);
 	}
 
 	public function refresh($refreshToken){
-		$oauth = new TowerOAuth($this->clientId,$this->clientSecret);
-		return $oauth->refresh($refreshToken);
+		return $this->getTowerOAuth()->refresh($refreshToken);
 	}
 
 	public function password($username,$password){
-		$oauth = new TowerOAuth($this->clientId,$this->clientSecret);
-		return $oauth->password($username,$password);
+		return $this->getTowerOAuth()->password($username,$password);
 	}
 	public function setEndPoint($endpoint){
 		$this->endPoint = $endpoint;
@@ -61,13 +69,13 @@ class TowerClient{
 	 * @param       $uri
 	 * @param array $data
 	 * @param string  $method
-	 * @throws Exception
+	 * @throws \Exception
 	 * @return mixed
 	 */
 	public function api($uri, $data = array(), $method = HttpClient::GET){
 		$url = $this->endPoint . $uri;
 		$headers = array('Content-Type: application/json','Authorization: Bearer ' . $this->accessToken);
-		$content = false;
+		$content = null;
 		if ($method == HttpClient::GET) {
 			$content = $this->httpClient->get($url,$data,$headers);
 		}elseif ($method == HttpClient::POST) {
@@ -192,7 +200,6 @@ class TowerClient{
 	 * 创建任务评论
 	 * @param $todoId
 	 * @param $comment
-	 *
 	 * @return mixed
 	 */
 	public function createTodoComment($todoId, $comment){

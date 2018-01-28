@@ -42,6 +42,12 @@ class TowerOAuth{
 		return $this->httpClient->post($this->endPoint . "token",$params);
 	}
 
+	/**
+	 * @deprecated
+	 * @param $username
+	 * @param $password
+	 * @return bool|mixed
+	 */
 	public function password($username,$password){
 		$params = ['grant_type' => 'password', 'username' => $username, 'password' => $password];
 		return $this->httpClient->post($this->endPoint . "token",$params);
