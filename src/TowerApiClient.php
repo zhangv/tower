@@ -1,20 +1,22 @@
 <?php
 /**
  * Tower SDK Client
- * @doc http://docs.tower.im/
+ *
+ * @license MIT
+ * @author zhangv
+ * @link http://docs.tower.im/
  */
 
 namespace zhangv\tower;
 
-require_once __DIR__ . '/HttpClient.php';
-require_once __DIR__ . '/TowerOAuth.php';
+use zhangv\tower\util\HttpClient;
 
-class TowerClient{
+class TowerApiClient{
 	private $endPoint = 'https://api.tower.im/v1/';
 
 	/** @var string 应用ID */
 	private $clientId = null;
-	/** @var string 私钥 */
+	/** @var string 密钥 */
 	private $clientSecret = null;
 	/** @var string 访问Token */
 	private $accessToken = null;

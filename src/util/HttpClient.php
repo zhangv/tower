@@ -1,6 +1,6 @@
 <?php
 
-namespace zhangv\tower;
+namespace zhangv\tower\util;
 
 class HttpClient {
 	const GET = 'get',POST = 'post', DELETE = 'delete',PUT = 'put',PATCH = 'patch';

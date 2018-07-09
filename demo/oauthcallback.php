@@ -1,7 +1,6 @@
 <?php
-require_once '../src/TowerClient.php';
-require_once '../src/TowerOAuth.php';
-use zhangv\tower\TowerClient;
+require_once 'autoload.php';
+use zhangv\tower\TowerApiClient;
 
 $cfg = require './config.php';
 $code = $_GET['code'];
@@ -9,7 +8,7 @@ $clientId = $cfg['clientId'];
 $clientSecret = $cfg['clientSecret'];
 $redirectURI = $cfg['redirectURI'];
 
-$tc = new TowerClient($clientId,$clientSecret);
+$tc = new TowerApiClient($clientId,$clientSecret);
 $r = $tc->authorize($code,$redirectURI);
 $r = json_decode($r);
 if(!empty($r->error)){
